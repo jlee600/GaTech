@@ -1,0 +1,55 @@
+CS 2200 Project 4
+
+Name: Jinseo Lee
+GTID: 903950086
+GT_Email: jlee4223@gatech.edu
+Section: C
+
+==============================================
+
+___________________________
+Problem-1 (FCFS Scheduler)
+---------------------------
+/* Fix me */
+From my simulation using the FCFS scheduler, the measurements of values gave 102 context switches when using 1 CPU, a total execution time of 70.2 seconds, and READY state time of 168.5 seconds. 
+Using execution with 2 CPUs, simulation gave 132 context switches, an execution time of 43.2 seconds, and the READY state time reduced to 30.1 seconds. 
+With 4 CPUs, while context switches became 177, execution time further came down to 37.0 seconds with virtually zero READY time (0.3 seconds). 
+These values substantiate the fact that higher numbers of CPUs minimize execution time by providing increased parallelism 
+but growth is sub-linear owing to synchronization overhead, delay in context switch, and non-uniform process arrival and I/O wait times distribution.
+
+________________________
+Problem-2 (Round-Robin)
+------------------------
+/* Fix me */
+800 ms timeslice yields 131 context switches, 67.9 s execution, and 317.1 s in READY; at 600 ms you see 155 context switches, 68.0 s execution, and 303.0 s READY; 
+a 400 ms timeslice produces 202 context switches, 67.9 s execution, and 291.7 s READY; finally, with a 200 ms timeslice, there are 363 context switches, 67.9 s execution, and 284.4 s in READY.
+
+-> These findings indicate that as timeslice becomes smaller, the number of context switches increases extremely high—high rate of preemption—while execution time overall becomes almost independent of timeslice size; 
+overall duration processes remain in the ready state becomes less as small timeslices cause high-speed cycling on the ready queue. Nonetheless, in a typical operating system, very brief timeslices are not usually good 
+because the overhead due to high context switching (e.g., cache invalidation and higher scheduler overhead) may have a material impact on total system performance even if it lowers wait time.
+
+________________________________
+Problem-3 (Preemptive Priority)
+--------------------------------
+/* Fix me */
+To avoid starvation in preemptive priority scheduling, operating systems generally employ priority aging. This method increases the effective priority of a process the longer it has been in the ready queue. 
+That is, every process has a base priority, but as time passes, its functional priority gets better (numerically lower if lower numbers are higher priority), so even low-priority processes will be scheduled sooner or later. 
+This avoids indefinite postponement. 
+
+In this project, we employ the formula: functional_priority = base_priority - (current_time - enqueue_time) * age_weight
+This achieves equity without losing the responsiveness of more-priority tasks.
+
+___________________________________________
+Problem-4 (The Priority Inversion Problem)
+-------------------------------------------
+/* Fix me */
+
+To remove priority inversion in a non-preemptive priority scheduler, a policy such as priority inheritance can be implemented. 
+When a low-priority process (such as the window manager) is holding up a high-priority process (such as P1), 
+then the scheduler will temporarily raise the priority of the waiting low-priority process to that of the dependent high-priority process. 
+This prevents the interference from medium-priority processes and enables the dependent high-priority process to execute as soon as possible.
+
+We would do this in our simulator by tracking resource dependencies. If a high-priority process is waiting for a lower-priority process to finish, 
+the lower-priority process is "boosted" in the queue to run before any process of medium priority. When it has finished its work (i.e., processed the window), 
+its priority drops back to what it originally was. 
+This enforces respecting of dependencies and does not let high-priority processes be starved indirectly by lower-priority processes being preempted.
