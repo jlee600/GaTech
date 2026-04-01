@@ -3,8 +3,6 @@
 Computer Science @ Georgia Tech  
 Thread: Information Internetworks & Intelligence  
 
-Structured archive of my coursework across semesters
-
 ## Structure
 
 - [Spring 2024](./Spring%202024): Data Structures & Algorithms, Objects & Design  
