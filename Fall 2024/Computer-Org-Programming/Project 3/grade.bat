@@ -1,0 +1,24 @@
+@echo off
+
+set imageName="gtcs2110/proj03-fall24:latest"
+
+docker container ps > nul 2>&1
+if "%errorlevel%" neq "0" (
+    echo ERROR: Docker not found. Ensure that Docker is installed and is running before running this script. Refer to the CS 2110 Docker Guide.
+    exit /b 1
+)
+
+echo Attempting to pull down most recent image of %imageName%...
+docker pull %imageName%
+if "%errorlevel%" neq "0" (
+    echo ERROR: Unable to pull down the most recent image of %imageName%
+    exit /b 1
+)
+
+set curDir=%cd%
+
+docker run -e "RUNNING_DOCKER=1" --rm -i -v "%curDir%:/autograder/submission/" %imageName% "//autograder/run_local" "%1"
+
+if %ERRORLEVEL% NEQ 125 (
+	start "" "tests/report.html"
+)
